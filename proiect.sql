@@ -1542,6 +1542,12 @@ create or replace package body grila_start is
                 k := k + 1;
                 dbms_output.put_line('  ' || k || '. ' || e.nume || ', ' || e.data);
                 
+                select nume, prenume, id_masina
+                bulk collect into pil
+                from (select nume, prenume, id_masina
+                      from piloti
+                      order by dbms_random.value);
+                
                 for p in pil.first..pil.last loop
                     select m.model, prod.nume
                     into tip, marca
